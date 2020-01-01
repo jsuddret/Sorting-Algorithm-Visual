@@ -22,7 +22,7 @@ window.title("Visual Sort")
 window.geometry('1852x1049+60+0')
 
 # canvas
-canvas = Canvas(window, width=w, height=h, bg='#FFFFFF')
+canvas = Canvas(window, width=w, height=h)
 canvas.place(x=320, y=0)
 
 
@@ -103,14 +103,6 @@ def insertion():
             print_rectangles()
             canvas.update()
         coordinates_list[pos] = cursor
-
-
-def merge(c_l):
-    if len(coordinates_list) <= 1:
-        return coordinates_list
-    mid = len(coordinates_list) // 2
-    left, right = merge(c_l[:mid]), merge(c_l[mid:])
-    return merge(left, right, c_l.copy())
 
 
 # scale with values from c to d
