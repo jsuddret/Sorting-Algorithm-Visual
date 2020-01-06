@@ -17,6 +17,7 @@ s = 0
 compare = 0
 iterate = 0
 elapse_rt = 0
+quick_time = 0
 
 # window
 window = Tk()
@@ -48,6 +49,7 @@ def create():
     clear()
     # create x amount of integer j, min number a, max number b
     l.clear()
+    coordinates_list.clear()
     x = s.get()
     y1 = 10
     rectangle_width = w / x
@@ -96,9 +98,18 @@ def clear():
     canvas.delete('all')
 
 
-def print_rectangles():
+def print_rectangles(val1, val2):
     for index in range(s.get()):
-        canvas.create_rectangle(coordinates_list[index], fill='black')
+        if index == val1 or index == val2:
+            canvas.create_rectangle(coordinates_list[index], fill='red')
+        else:
+            canvas.create_rectangle(coordinates_list[index], fill='black')
+
+
+def print_green():
+    clear()
+    for index in range(s.get()):
+        canvas.create_rectangle(coordinates_list[index], fill='green')
 
 
 def swap(g, j):
@@ -127,11 +138,12 @@ def bubble():
                 swap(rectangle - 1, rectangle)
                 swapped = True
                 clear()
-                print_rectangles()
+                print_rectangles(rectangle - 1, rectangle)
                 canvas.update()
             end_time = time.time() - start_time
             elapse_rt = end_time
             update_elapsed()
+    print_green()
 
 
 def selection():
@@ -152,13 +164,14 @@ def selection():
                 update_comparisons()
                 swap(minimum, selection_i)
                 clear()
-                print_rectangles()
+                print_rectangles(minimum, selection_i)
                 canvas.update()
             selection_i += 1
             end_time = time.time() - start_time
             elapse_rt = end_time
             update_elapsed()
         minimum += 1
+    print_green()
 
 
 def insertion():
@@ -179,36 +192,56 @@ def insertion():
             swap(pos, pos - 1)
             pos = pos - 1
             clear()
-            print_rectangles()
+            print_rectangles(pos, pos - 1)
             canvas.update()
             end_time = time.time() - start_time
             elapse_rt = end_time
             update_elapsed()
         coordinates_list[pos] = cursor
+    print_green()
 
 
-def heap():
-    length = len(coordinates_list)
-    least_parent = int(round(length / 2))
-    for rectangle in range(least_parent, -1, -1):
-        moveDown(i, length)
-    for rectangle in range(length, 0, -1):
-        if coordinates_list[0][3] > coordinates_list[rectangle][3]:
-            swap(0, rectangle)
-            moveDown(0, rectangle - 1)
+def partition(low, high):
+    global elapse_rt
+    global compare
+    global iterate
+    idx = (low - 1)
+    pivot = coordinates_list[high]
+    for rectangle in range(low, high):
+        iterate += 1
+        update_iterations()
+        if coordinates_list[rectangle][3] <= pivot[3]:
+            compare += 1
+            update_comparisons()
+            idx += 1
+            swap(idx, rectangle)
+            clear()
+            print_rectangles(idx, rectangle)
+            canvas.update()
+            end_time = time.time() - quick_time
+            elapse_rt = end_time
+            update_elapsed()
+    swap(idx + 1, high)
+    return idx + 1
 
 
-def moveDown(first, last):
-    largest = 2 * first + 1
-    while largest <= last:
-        if largest < last and coordinates_list[largest][3] < coordinates_list[largest + 1][3]:
-            largest += 1
-        if coordinates_list[largest][3] > coordinates_list[first][3]:
-            swap(largest, first)
-            first = largest
-            largest = 2 * first + 1
-        else:
-            return
+def quick_sort(low, high):
+    if low < high:
+        pi = partition(low, high)
+        quick_sort(low, pi - 1)
+        quick_sort(pi + 1, high)
+    if low == high:
+        print_green()
+
+
+def quick():
+    global quick_time
+    global compare
+    compare = 0
+    global iterate
+    iterate = 0
+    quick_time = time.time()
+    quick_sort(0, len(coordinates_list) - 1)
 
 
 # scale with values from c to d
@@ -220,7 +253,7 @@ create_visual = Button(window, text='Create Visual', command=create)
 bubble_sort_button = Button(window, text='Bubble Sort', command=bubble)
 selection_sort_button = Button(window, text='Selection Sort', command=selection)
 insertion_sort_button = Button(window, text='Insertion Sort', command=insertion)
-heap_sort_button = Button(window, text='Heap Sort')
+quick_sort_button = Button(window, text='Quick Sort', command=quick)
 clear_button = Button(window, text='Clear', command=stop)
 
 # placement
@@ -228,7 +261,7 @@ create_visual.place(x=50, y=115)
 bubble_sort_button.place(x=50, y=165)
 selection_sort_button.place(x=50, y=215)
 insertion_sort_button.place(x=50, y=265)
-heap_sort_button.place(x=50, y=315)
+quick_sort_button.place(x=50, y=315)
 clear_button.place(x=50, y=365)
 comparisons.place(x=50, y=815)
 iterations.place(x=50, y=840)
