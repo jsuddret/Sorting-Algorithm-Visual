@@ -76,10 +76,11 @@ def update_iterations():
 
 
 def update_elapsed():
-    elapsed.configure(text='Time Elapsed:\t' + str(elapse_rt) + 's')
+    elapsed.configure(text='Time Elapsed:\t' + str(round(elapse_rt, 3)) + 's')
 
 
 def stop():
+    coordinates_list.clear()
     global elapse_rt
     elapse_rt = 0
     update_elapsed()
@@ -244,6 +245,59 @@ def quick():
     quick_sort(0, len(coordinates_list) - 1)
 
 
+def heapify(n, index):
+    global compare
+    largest = index
+    var_l = 2 * index + 1
+    var_r = 2 * index + 2
+    if var_l < n and coordinates_list[index][3] < coordinates_list[var_l][3]:
+        largest = var_l
+        compare += 1
+        update_comparisons()
+    if var_r < n and coordinates_list[largest][3] < coordinates_list[var_r][3]:
+        compare += 1
+        update_comparisons()
+        largest = var_r
+    if largest != index:
+        swap(index, largest)
+        clear()
+        print_rectangles(index, largest)
+        canvas.update()
+        heapify(n, largest)
+
+
+def heap():
+    global elapse_rt
+    start_time = time.time()
+    global compare
+    compare = 0
+    global iterate
+    iterate = 0
+    n = len(coordinates_list)
+    for rectangle in range(n, -1, -1):
+        end_time = time.time() - start_time
+        elapse_rt = end_time
+        update_elapsed()
+        iterate += 1
+        update_iterations()
+        heapify(n, rectangle)
+    for next_rectangle in range(n-1, 0, -1):
+        end_time = time.time() - start_time
+        elapse_rt = end_time
+        update_elapsed()
+        iterate += 1
+        update_iterations()
+        swap(next_rectangle, 0)
+        clear()
+        print_rectangles(next_rectangle, 0)
+        canvas.update()
+        heapify(next_rectangle, 0)
+    print_green()
+    for rectangle in range(len(coordinates_list)):
+        print(coordinates_list[rectangle][3])
+    print('==========')
+
+
 # scale with values from c to d
 s = Scale(window, orient=HORIZONTAL, length=250, from_=c, to=d)
 s.place(x=50, y=50)
@@ -254,7 +308,9 @@ bubble_sort_button = Button(window, text='Bubble Sort', command=bubble)
 selection_sort_button = Button(window, text='Selection Sort', command=selection)
 insertion_sort_button = Button(window, text='Insertion Sort', command=insertion)
 quick_sort_button = Button(window, text='Quick Sort', command=quick)
+heap_sort_button = Button(window, text='Heap Sort', command=heap)
 clear_button = Button(window, text='Clear', command=stop)
+
 
 # placement
 create_visual.place(x=50, y=115)
@@ -262,7 +318,8 @@ bubble_sort_button.place(x=50, y=165)
 selection_sort_button.place(x=50, y=215)
 insertion_sort_button.place(x=50, y=265)
 quick_sort_button.place(x=50, y=315)
-clear_button.place(x=50, y=365)
+heap_sort_button.place(x=50, y=365)
+clear_button.place(x=50, y=415)
 comparisons.place(x=50, y=815)
 iterations.place(x=50, y=840)
 elapsed.place(x=50, y=865)
