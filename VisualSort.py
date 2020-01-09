@@ -19,9 +19,15 @@ iterate = 0
 elapse_rt = 0
 quick_time = 0
 
+# number of algorithms in place
+alg_num = 6
+
 # window
 window = Tk()
 window.title("Visual Sort")
+
+# layout intended for task bar on the left-hand side of the screen
+# consider full screen implementation
 window.geometry('1852x1049+60+0')
 
 # canvas
@@ -32,6 +38,43 @@ canvas.place(x=320, y=0)
 comparisons = Label(window, text='Comparisons:\t' + str(compare))
 iterations = Label(window, text='Iterations:\t' + str(iterate))
 elapsed = Label(window, text='Time Elapsed:\t' + str(elapse_rt) + 's')
+
+
+def launch_test():
+    test_page = Tk()
+    test_page.title("Test")
+    test_page.geometry('463x262+575+348')
+
+    # components in launch_test window
+    instruct_label = Label(test_page, text='Choose Up to Three Algorithms:')
+    run_btn = Button(test_page, text='Run')
+    launch_s = Scale(test_page, orient=HORIZONTAL, length=125, from_=c, to=d)
+    launch_s.place(x=300, y=16)
+
+    # check buttons
+    bubble_var = IntVar()
+    check_bubble = Checkbutton(test_page, text='Bubble Sort', variable=bubble_var, onvalue=1, offvalue=0)
+    insertion_var = IntVar()
+    check_insertion = Checkbutton(test_page, text='Insertion Sort', variable=insertion_var, onvalue=1, offvalue=0)
+    selection_var = IntVar()
+    check_selection = Checkbutton(test_page, text='Selection Sort', variable=selection_var, onvalue=1, offvalue=0)
+    quick_var = IntVar()
+    check_quick = Checkbutton(test_page, text='Quick Sort', variable=quick_var, onvalue=1, offvalue=0)
+    heap_var = IntVar()
+    check_heap = Checkbutton(test_page, text='Heap Sort', variable=heap_var, onvalue=1, offvalue=0)
+    shell_var = IntVar()
+    check_shell = Checkbutton(test_page, text='Shell Sort', variable=shell_var, onvalue=1, offvalue=0)
+
+    # layout for launch_test_windows
+    run_btn.place(x=400, y=72)
+    instruct_label.place(x=48, y=36)
+    check_bubble.place(x=48, y=72)
+    check_insertion.place(x=48, y=96)
+    check_selection.place(x=48, y=120)
+    check_quick.place(x=48, y=144)
+    check_heap.place(x=48, y=168)
+    check_shell.place(x=48, y=192)
+
 
 
 # methods
@@ -281,7 +324,7 @@ def heap():
         iterate += 1
         update_iterations()
         heapify(n, rectangle)
-    for next_rectangle in range(n-1, 0, -1):
+    for next_rectangle in range(n - 1, 0, -1):
         end_time = time.time() - start_time
         elapse_rt = end_time
         update_elapsed()
@@ -293,9 +336,37 @@ def heap():
         canvas.update()
         heapify(next_rectangle, 0)
     print_green()
-    for rectangle in range(len(coordinates_list)):
-        print(coordinates_list[rectangle][3])
-    print('==========')
+
+
+def shell():
+    global elapse_rt
+    start_time = time.time()
+    global compare
+    compare = 0
+    global iterate
+    iterate = 0
+    n = int(len(coordinates_list))
+    gap = int(n / 2)
+    while gap > 0:
+        for rectangle in range(int(gap), int(n)):
+            iterate += 1
+            update_iterations()
+            temp = coordinates_list[rectangle]
+            j = rectangle
+            while j >= int(gap) and coordinates_list[j - int(gap)][3] > temp[3]:
+                compare += 1
+                update_comparisons()
+                swap(j, j - int(gap))
+                clear()
+                print_rectangles(j, j - int(gap))
+                canvas.update()
+                j -= int(gap)
+                end_time = time.time() - start_time
+                elapse_rt = end_time
+                update_elapsed()
+            coordinates_list[j] = temp
+        gap = gap / 2
+    print_green()
 
 
 # scale with values from c to d
@@ -309,8 +380,9 @@ selection_sort_button = Button(window, text='Selection Sort', command=selection)
 insertion_sort_button = Button(window, text='Insertion Sort', command=insertion)
 quick_sort_button = Button(window, text='Quick Sort', command=quick)
 heap_sort_button = Button(window, text='Heap Sort', command=heap)
+shell_sort_button = Button(window, text='Shell Sort', command=shell)
 clear_button = Button(window, text='Clear', command=stop)
-
+test_button = Button(window, text='Test', command=launch_test)
 
 # placement
 create_visual.place(x=50, y=115)
@@ -319,7 +391,9 @@ selection_sort_button.place(x=50, y=215)
 insertion_sort_button.place(x=50, y=265)
 quick_sort_button.place(x=50, y=315)
 heap_sort_button.place(x=50, y=365)
-clear_button.place(x=50, y=415)
+shell_sort_button.place(x=50, y=415)
+clear_button.place(x=50, y=465)
+test_button.place(x=50, y=515)
 comparisons.place(x=50, y=815)
 iterations.place(x=50, y=840)
 elapsed.place(x=50, y=865)
