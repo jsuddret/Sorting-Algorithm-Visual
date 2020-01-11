@@ -45,25 +45,39 @@ def launch_test():
     test_page.title("Test")
     test_page.geometry('463x262+575+348')
 
-    # components in launch_test window
-    instruct_label = Label(test_page, text='Choose Up to Three Algorithms:')
-    run_btn = Button(test_page, text='Run')
-    launch_s = Scale(test_page, orient=HORIZONTAL, length=125, from_=c, to=d)
-    launch_s.place(x=300, y=16)
-
     # check buttons
     bubble_var = IntVar()
-    check_bubble = Checkbutton(test_page, text='Bubble Sort', variable=bubble_var, onvalue=1, offvalue=0)
+    check_bubble = Checkbutton(test_page, text='Bubble Sort', variable=bubble_var)
+    check_bubble.pack()
     insertion_var = IntVar()
-    check_insertion = Checkbutton(test_page, text='Insertion Sort', variable=insertion_var, onvalue=1, offvalue=0)
+    check_insertion = Checkbutton(test_page, text='Insertion Sort', variable=insertion_var)
+    check_insertion.pack()
     selection_var = IntVar()
-    check_selection = Checkbutton(test_page, text='Selection Sort', variable=selection_var, onvalue=1, offvalue=0)
+    check_selection = Checkbutton(test_page, text='Selection Sort', variable=selection_var)
+    check_selection.pack()
     quick_var = IntVar()
-    check_quick = Checkbutton(test_page, text='Quick Sort', variable=quick_var, onvalue=1, offvalue=0)
+    check_quick = Checkbutton(test_page, text='Quick Sort', variable=quick_var)
+    check_quick.pack()
     heap_var = IntVar()
-    check_heap = Checkbutton(test_page, text='Heap Sort', variable=heap_var, onvalue=1, offvalue=0)
+    check_heap = Checkbutton(test_page, text='Heap Sort', variable=heap_var)
+    check_heap.pack()
     shell_var = IntVar()
-    check_shell = Checkbutton(test_page, text='Shell Sort', variable=shell_var, onvalue=1, offvalue=0)
+    check_shell = Checkbutton(test_page, text='Shell Sort', variable=shell_var)
+    check_shell.pack()
+
+    def run():
+        check_button_list = [bubble_var.get(), insertion_var.get(), selection_var.get(), quick_var.get(),
+                             heap_var.get(), shell_var.get()]
+        check_sum = 0
+        for variables in range(alg_num):
+            check_sum += check_button_list[variables]
+        print(check_sum)
+
+    # components in launch_test window
+    instruct_label = Label(test_page, text='Choose Up to Three Algorithms:')
+    run_btn = Button(test_page, text='Run', command=run)
+    launch_s = Scale(test_page, orient=HORIZONTAL, length=125, from_=c, to=d)
+    launch_s.place(x=300, y=16)
 
     # layout for launch_test_windows
     run_btn.place(x=400, y=72)
@@ -75,6 +89,8 @@ def launch_test():
     check_heap.place(x=48, y=168)
     check_shell.place(x=48, y=192)
 
+    # mainloop
+    test_page.mainloop()
 
 
 # methods
@@ -150,7 +166,7 @@ def print_rectangles(val1, val2):
             canvas.create_rectangle(coordinates_list[index], fill='black')
 
 
-def print_green():
+def print_final():
     clear()
     for index in range(s.get()):
         canvas.create_rectangle(coordinates_list[index], fill='green')
@@ -187,7 +203,7 @@ def bubble():
             end_time = time.time() - start_time
             elapse_rt = end_time
             update_elapsed()
-    print_green()
+    print_final()
 
 
 def selection():
@@ -215,7 +231,7 @@ def selection():
             elapse_rt = end_time
             update_elapsed()
         minimum += 1
-    print_green()
+    print_final()
 
 
 def insertion():
@@ -242,7 +258,7 @@ def insertion():
             elapse_rt = end_time
             update_elapsed()
         coordinates_list[pos] = cursor
-    print_green()
+    print_final()
 
 
 def partition(low, high):
@@ -254,6 +270,7 @@ def partition(low, high):
     for rectangle in range(low, high):
         iterate += 1
         update_iterations()
+        print(coordinates_list[rectangle])
         if coordinates_list[rectangle][3] <= pivot[3]:
             compare += 1
             update_comparisons()
@@ -275,7 +292,7 @@ def quick_sort(low, high):
         quick_sort(low, pi - 1)
         quick_sort(pi + 1, high)
     if low == high:
-        print_green()
+        print_final()
 
 
 def quick():
@@ -335,7 +352,7 @@ def heap():
         print_rectangles(next_rectangle, 0)
         canvas.update()
         heapify(next_rectangle, 0)
-    print_green()
+    print_final()
 
 
 def shell():
@@ -366,7 +383,7 @@ def shell():
                 update_elapsed()
             coordinates_list[j] = temp
         gap = gap / 2
-    print_green()
+    print_final()
 
 
 # scale with values from c to d
