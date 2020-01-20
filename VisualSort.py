@@ -1,7 +1,9 @@
 from tkinter import *
+from tkinter import ttk
 import tkinter
 import random
 import time
+import queue
 
 # variables
 l = []
@@ -43,35 +45,63 @@ elapsed = Label(window, text='Time Elapsed:\t' + str(elapse_rt) + 's')
 def launch_test():
     test_page = Tk()
     test_page.title("Test")
-    test_page.geometry('463x262+575+348')
+    test_page.geometry('533x262+575+348')
 
-    # check buttons
-    bubble_var = IntVar()
-    check_bubble = Checkbutton(test_page, text='Bubble Sort', variable=bubble_var)
-    check_bubble.pack()
-    insertion_var = IntVar()
-    check_insertion = Checkbutton(test_page, text='Insertion Sort', variable=insertion_var)
-    check_insertion.pack()
-    selection_var = IntVar()
-    check_selection = Checkbutton(test_page, text='Selection Sort', variable=selection_var)
-    check_selection.pack()
-    quick_var = IntVar()
-    check_quick = Checkbutton(test_page, text='Quick Sort', variable=quick_var)
-    check_quick.pack()
-    heap_var = IntVar()
-    check_heap = Checkbutton(test_page, text='Heap Sort', variable=heap_var)
-    check_heap.pack()
-    shell_var = IntVar()
-    check_shell = Checkbutton(test_page, text='Shell Sort', variable=shell_var)
-    check_shell.pack()
+    q = queue.LifoQueue(maxsize=3)
 
+    def update_labels():
+        for elem in list(q.queue):
+            print(elem)
+
+    def label(x):
+        print(q.qsize())
+        idx = x
+        if q.qsize() <= 2:
+            q.put(components[idx])
+        elif q.qsize() >= 3:
+            while q.qsize() > 2:
+                q.get()
+            q.put(components[idx])
+
+    # define checkboxes
+    bubble_btn = Button(test_page, text='Bubble Sort', command=lambda: label(1))
+    insertion_btn = Button(test_page, text='Insertion Sort', command=lambda: label(2))
+    selection_btn = Button(test_page, text='Selection Sort', command=lambda: label(3))
+    quick_btn = Button(test_page, text='Quick Sort', command=lambda: label(4))
+    heap_btn = Button(test_page, text='Heap Sort', command=lambda: label(5))
+    shell_btn = Button(test_page, text='Shell Sort', command=lambda: label(6))
+
+    # button list
+    btn_list = [bubble_btn, insertion_btn, selection_btn, quick_btn, heap_btn, shell_btn]
+
+    # place checkboxes
+    y_prime_prime = 64
+    for btn in range(len(btn_list)):
+        btn_list[btn].place(x=48, y=y_prime_prime)
+        y_prime_prime += 32
+
+    # three labels
+    label_one = Label(test_page)
+    label_two = Label(test_page)
+    label_three = Label(test_page)
+
+    # label placement
+    label_one.place(x=200, y=72)
+    label_two.place(x=325, y=72)
+    label_three.place(x=450, y=72)
+
+    # in beta implementation stages
     def run():
-        check_button_list = [bubble_var.get(), insertion_var.get(), selection_var.get(), quick_var.get(),
-                             heap_var.get(), shell_var.get()]
+        values = [bubble_var.get(), insertion_var.get(), selection_var.get(), quick_var.get(), heap_var.get(),
+                  shell_var.get()]
         check_sum = 0
-        for variables in range(alg_num):
-            check_sum += check_button_list[variables]
+        for value in range(len(values)):
+            check_sum += values[value]
         print(check_sum)
+        if check_sum > 3:
+            instruct_label.configure(fg='red')
+        else:
+            instruct_label.configure(fg='black')
 
     # components in launch_test window
     instruct_label = Label(test_page, text='Choose Up to Three Algorithms:')
@@ -80,14 +110,11 @@ def launch_test():
     launch_s.place(x=300, y=16)
 
     # layout for launch_test_windows
-    run_btn.place(x=400, y=72)
+    run_btn.place(x=450, y=32)
     instruct_label.place(x=48, y=36)
-    check_bubble.place(x=48, y=72)
-    check_insertion.place(x=48, y=96)
-    check_selection.place(x=48, y=120)
-    check_quick.place(x=48, y=144)
-    check_heap.place(x=48, y=168)
-    check_shell.place(x=48, y=192)
+
+    # define variables
+    counter = 1
 
     # mainloop
     test_page.mainloop()
@@ -402,18 +429,16 @@ clear_button = Button(window, text='Clear', command=stop)
 test_button = Button(window, text='Test', command=launch_test)
 
 # placement
-create_visual.place(x=50, y=115)
-bubble_sort_button.place(x=50, y=165)
-selection_sort_button.place(x=50, y=215)
-insertion_sort_button.place(x=50, y=265)
-quick_sort_button.place(x=50, y=315)
-heap_sort_button.place(x=50, y=365)
-shell_sort_button.place(x=50, y=415)
-clear_button.place(x=50, y=465)
-test_button.place(x=50, y=515)
-comparisons.place(x=50, y=815)
-iterations.place(x=50, y=840)
-elapsed.place(x=50, y=865)
+# components is order-sensitive
+components = [create_visual, bubble_sort_button, selection_sort_button, insertion_sort_button, quick_sort_button,
+              heap_sort_button, shell_sort_button, clear_button, test_button, comparisons, iterations, elapsed]
+
+comp_text = ['Bubble Sort', 'Selection Sort', 'Insertion Sort', 'Quick Sort', 'Heap Sort', 'Shell Sort']
+
+y_prime = 115
+for comp in range(len(components)):
+    components[comp].place(x=50, y=y_prime)
+    y_prime += 50
 
 # mainloop
 window.mainloop()
