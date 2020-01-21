@@ -47,21 +47,30 @@ def launch_test():
     test_page.title("Test")
     test_page.geometry('533x262+575+348')
 
-    q = queue.LifoQueue(maxsize=3)
+    q = queue.Queue(maxsize=3)
+
+    iteration_list = [0, 0, 0]
+    comparison_list = [0, 0, 0]
+    time_elapsed_list = [0, 0, 0]
 
     def update_labels():
-        for elem in list(q.queue):
-            print(elem)
+        cont = 2
+        for element in list(q.queue):
+            label_list[cont].configure(text=element + '\n' + str(iteration_list[cont - 1]) + '\n' +
+                                            str(comparison_list[cont - 1]) + '\n' +
+                                            str(round(time_elapsed_list[cont - 1], 3)) + 's')
+            cont -= 1
 
     def label(x):
-        print(q.qsize())
         idx = x
         if q.qsize() <= 2:
-            q.put(components[idx])
+            q.put(buttons_test_list[idx])
         elif q.qsize() >= 3:
             while q.qsize() > 2:
                 q.get()
-            q.put(components[idx])
+            q.put(buttons_test_list[idx])
+        print(q.qsize())
+        update_labels()
 
     # define checkboxes
     bubble_btn = Button(test_page, text='Bubble Sort', command=lambda: label(1))
@@ -85,26 +94,29 @@ def launch_test():
     label_two = Label(test_page)
     label_three = Label(test_page)
 
-    # label placement
-    label_one.place(x=200, y=72)
-    label_two.place(x=325, y=72)
-    label_three.place(x=450, y=72)
+    # label list
+    label_list = [label_one, label_two, label_three]
 
-    # in beta implementation stages
+    lbl_k = 100
+    for lbl in range(len(label_list)):
+        label_list[lbl].place(x=200 + (lbl_k * lbl), y=96)
+
     def run():
-        values = [bubble_var.get(), insertion_var.get(), selection_var.get(), quick_var.get(), heap_var.get(),
-                  shell_var.get()]
-        check_sum = 0
-        for value in range(len(values)):
-            check_sum += values[value]
-        print(check_sum)
-        if check_sum > 3:
-            instruct_label.configure(fg='red')
-        else:
-            instruct_label.configure(fg='black')
+        index_val = []
+        for element in list(q.queue):
+            for bll in range(len(buttons_test_list)):
+                if str(element) == buttons_test_list[bll]:
+                    index_val.append(bll)
+        print(index_val)
+        for value in range(len(index_val)):
+            components[value].invoke()
+            comparison_list[value] = compare
+            iteration_list[value] = iterate
+            time_elapsed_list[value] = elapse_rt
+        update_labels()
 
     # components in launch_test window
-    instruct_label = Label(test_page, text='Choose Up to Three Algorithms:')
+    instruct_label = Label(test_page, text='Choose Three Algorithms:')
     run_btn = Button(test_page, text='Run', command=run)
     launch_s = Scale(test_page, orient=HORIZONTAL, length=125, from_=c, to=d)
     launch_s.place(x=300, y=16)
@@ -113,8 +125,9 @@ def launch_test():
     run_btn.place(x=450, y=32)
     instruct_label.place(x=48, y=36)
 
-    # define variables
-    counter = 1
+    # buttons test list
+    buttons_test_list = ['null', 'Bubble Sort', 'Insertion Sort', 'Selection Sort', 'Quick Sort', 'Heap Sort',
+                         'Shell Sort']
 
     # mainloop
     test_page.mainloop()
