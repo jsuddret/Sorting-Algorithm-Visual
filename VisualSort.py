@@ -92,9 +92,10 @@ def launch_test():
     def update_labels():
         cont = 2
         for element in list(q.queue):
-            label_list[cont].configure(text=element + '\n' + str(iteration_list[cont - 1]) + '\n' +
-                                            str(comparison_list[cont - 1]) + '\n' +
-                                            str(round(time_elapsed_list[cont - 1], 3)) + 's')
+            label_list[cont].configure(text=element + '\n' + str(iteration_list[cont]) + '\n' +
+                                            str(comparison_list[cont]) + '\n' +
+                                            str(round(time_elapsed_list[cont], 3)) + 's')
+            print(iteration_list)
             cont -= 1
 
     def label(x):
@@ -141,6 +142,7 @@ def launch_test():
     # for each algorithm in the queue, the corresponding stats
     # are projected under their respective labels
     def run():
+        global coordinates_list
         # create_visual()
         s.set(launch_s.get())
         index_val = []
@@ -149,7 +151,9 @@ def launch_test():
                 if str(element) == buttons_test_list[bll]:
                     index_val.append(bll)
         print(index_val)
+        new_cl = coordinates_list
         for value in range(len(index_val)):
+            coordinates_list = new_cl
             components[value].invoke()
             comparison_list[value] = compare
             iteration_list[value] = iterate
