@@ -42,6 +42,40 @@ iterations = Label(window, text='Iterations:\t' + str(iterate))
 elapsed = Label(window, text='Time Elapsed:\t' + str(elapse_rt) + 's')
 
 
+# methods
+def create():
+    global elapse_rt
+    elapse_rt = 0
+    update_elapsed()
+    global iterate
+    iterate = 0
+    update_iterations()
+    global compare
+    compare = 0
+    update_comparisons()
+    coordinates_list.clear()
+    clear()
+
+    # create x amount of integer j, min number a, max number b
+    l.clear()
+    coordinates_list.clear()
+    x = s.get()
+    y1 = 10
+    rectangle_width = w / x
+    for index in range(x):
+        j = random.randint(a, b)
+        l.append(j)  # add to integer list
+    for index in range(x):
+        rect_x1 = index * rectangle_width
+        rect_y1 = y1
+        rect_x2 = (index + 1) * rectangle_width
+        rect_y2 = l[index] / 9
+        canvas.create_rectangle(rect_x1, rect_y1, rect_x2, rect_y2,
+                                fill='black')
+        coordinates = [rect_x1, rect_y1, rect_x2, rect_y2]
+        coordinates_list.append(coordinates)
+
+
 def launch_test():
     test_page = Tk()
     test_page.title("Test")
@@ -53,6 +87,8 @@ def launch_test():
     comparison_list = [0, 0, 0]
     time_elapsed_list = [0, 0, 0]
 
+    # apply values and data to
+    # each of the three labels
     def update_labels():
         cont = 2
         for element in list(q.queue):
@@ -101,7 +137,12 @@ def launch_test():
     for lbl in range(len(label_list)):
         label_list[lbl].place(x=200 + (lbl_k * lbl), y=96)
 
+    # code runs on when run button is pressed ...
+    # for each algorithm in the queue, the corresponding stats
+    # are projected under their respective labels
     def run():
+        # create_visual()
+        s.set(launch_s.get())
         index_val = []
         for element in list(q.queue):
             for bll in range(len(buttons_test_list)):
@@ -134,38 +175,6 @@ def launch_test():
 
 
 # methods
-def create():
-    global elapse_rt
-    elapse_rt = 0
-    update_elapsed()
-    global iterate
-    iterate = 0
-    update_iterations()
-    global compare
-    compare = 0
-    update_comparisons()
-    coordinates_list.clear()
-    clear()
-    # create x amount of integer j, min number a, max number b
-    l.clear()
-    coordinates_list.clear()
-    x = s.get()
-    y1 = 10
-    rectangle_width = w / x
-    for index in range(x):
-        j = random.randint(a, b)
-        l.append(j)  # add to integer list
-    for index in range(x):
-        rect_x1 = index * rectangle_width
-        rect_y1 = y1
-        rect_x2 = (index + 1) * rectangle_width
-        rect_y2 = l[index] / 9
-        canvas.create_rectangle(rect_x1, rect_y1, rect_x2, rect_y2,
-                                fill='black')
-        coordinates = [rect_x1, rect_y1, rect_x2, rect_y2]
-        coordinates_list.append(coordinates)
-
-
 def update_comparisons():
     comparisons.configure(text='Comparisons:\t' + str(compare))
 
