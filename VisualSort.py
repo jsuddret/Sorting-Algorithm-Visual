@@ -469,39 +469,26 @@ def shell():
 s = Scale(window, orient=HORIZONTAL, length=250, from_=c, to=d)
 s.place(x=50, y=50)
 
-# buttons
-create_visual = Button(window, text="Create Visual", command=create)
-bubble_sort_button = Button(window, text="Bubble Sort", command=bubble)
-selection_sort_button = Button(window, text="Selection Sort", command=selection)
-insertion_sort_button = Button(window, text="Insertion Sort", command=insertion)
-quick_sort_button = Button(window, text="Quick Sort", command=quick)
-heap_sort_button = Button(window, text="Heap Sort", command=heap)
-shell_sort_button = Button(window, text="Shell Sort", command=shell)
-clear_button = Button(window, text="Clear", command=stop)
-test_button = Button(window, text="Test", command=launch_test)
-
-# placement
-# components is order-sensitive
-
-# y_prime = range(115, 715, 50)
-for comp, y_coord in zip(
+# creation of buttons and placement of components
+# note: placement of components is order-sensitive
+for component, y_coord in zip(
     [
-        create_visual,
-        bubble_sort_button,
-        selection_sort_button,
-        insertion_sort_button,
-        quick_sort_button,
-        heap_sort_button,
-        shell_sort_button,
-        clear_button,
-        test_button,
+        Button(window, text="Create Visual", command=create),
+        Button(window, text="Bubble Sort", command=bubble),
+        Button(window, text="Selection Sort", command=selection),
+        Button(window, text="Insertion Sort", command=insertion),
+        Button(window, text="Quick Sort", command=quick),
+        Button(window, text="Heap Sort", command=heap),
+        Button(window, text="Shell Sort", command=shell),
+        Button(window, text="Clear", command=stop),
+        Button(window, text="Test", command=launch_test),
         comparisons,
         iterations,
         elapsed,
     ],
     range(115, 715, 50),
 ):
-    comp.place(x=50, y=y_coord)
+    component.place(x=50, y=y_coord)
 
 # mainloop
 window.mainloop()
