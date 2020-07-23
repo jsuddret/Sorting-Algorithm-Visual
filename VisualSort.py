@@ -30,16 +30,16 @@ window.title("Visual Sort")
 
 # layout intended for task bar on the left-hand side of the screen
 # consider full screen implementation
-window.geometry('1852x1049+60+0')
+window.geometry("1852x1049+60+0")
 
 # canvas
 canvas = Canvas(window, width=w, height=h)
 canvas.place(x=320, y=0)
 
 # labels
-comparisons = Label(window, text='Comparisons:\t' + str(compare))
-iterations = Label(window, text='Iterations:\t' + str(iterate))
-elapsed = Label(window, text='Time Elapsed:\t' + str(elapse_rt) + 's')
+comparisons = Label(window, text="Comparisons:\t" + str(compare))
+iterations = Label(window, text="Iterations:\t" + str(iterate))
+elapsed = Label(window, text="Time Elapsed:\t" + str(elapse_rt) + "s")
 
 
 # methods
@@ -70,8 +70,7 @@ def create():
         rect_y1 = y1
         rect_x2 = (index + 1) * rectangle_width
         rect_y2 = l[index] / 9
-        canvas.create_rectangle(rect_x1, rect_y1, rect_x2, rect_y2,
-                                fill='black')
+        canvas.create_rectangle(rect_x1, rect_y1, rect_x2, rect_y2, fill="black")
         coordinates = [rect_x1, rect_y1, rect_x2, rect_y2]
         coordinates_list.append(coordinates)
 
@@ -79,7 +78,7 @@ def create():
 def launch_test():
     test_page = Tk()
     test_page.title("Test")
-    test_page.geometry('533x262+575+348')
+    test_page.geometry("533x262+575+348")
 
     q = queue.Queue(maxsize=3)
 
@@ -92,9 +91,16 @@ def launch_test():
     def update_labels():
         cont = 2
         for element in list(q.queue):
-            label_list[cont].configure(text=element + '\n' + str(iteration_list[cont]) + '\n' +
-                                            str(comparison_list[cont]) + '\n' +
-                                            str(round(time_elapsed_list[cont], 3)) + 's')
+            label_list[cont].configure(
+                text=element
+                + "\n"
+                + str(iteration_list[cont])
+                + "\n"
+                + str(comparison_list[cont])
+                + "\n"
+                + str(round(time_elapsed_list[cont], 3))
+                + "s"
+            )
             print(iteration_list)
             cont -= 1
 
@@ -110,15 +116,22 @@ def launch_test():
         update_labels()
 
     # define checkboxes
-    bubble_btn = Button(test_page, text='Bubble Sort', command=lambda: label(1))
-    insertion_btn = Button(test_page, text='Insertion Sort', command=lambda: label(2))
-    selection_btn = Button(test_page, text='Selection Sort', command=lambda: label(3))
-    quick_btn = Button(test_page, text='Quick Sort', command=lambda: label(4))
-    heap_btn = Button(test_page, text='Heap Sort', command=lambda: label(5))
-    shell_btn = Button(test_page, text='Shell Sort', command=lambda: label(6))
+    bubble_btn = Button(test_page, text="Bubble Sort", command=lambda: label(1))
+    insertion_btn = Button(test_page, text="Insertion Sort", command=lambda: label(2))
+    selection_btn = Button(test_page, text="Selection Sort", command=lambda: label(3))
+    quick_btn = Button(test_page, text="Quick Sort", command=lambda: label(4))
+    heap_btn = Button(test_page, text="Heap Sort", command=lambda: label(5))
+    shell_btn = Button(test_page, text="Shell Sort", command=lambda: label(6))
 
     # button list
-    btn_list = [bubble_btn, insertion_btn, selection_btn, quick_btn, heap_btn, shell_btn]
+    btn_list = [
+        bubble_btn,
+        insertion_btn,
+        selection_btn,
+        quick_btn,
+        heap_btn,
+        shell_btn,
+    ]
 
     # place checkboxes
     y_prime_prime = 64
@@ -161,8 +174,8 @@ def launch_test():
         update_labels()
 
     # components in launch_test window
-    instruct_label = Label(test_page, text='Choose Three Algorithms:')
-    run_btn = Button(test_page, text='Run', command=run)
+    instruct_label = Label(test_page, text="Choose Three Algorithms:")
+    run_btn = Button(test_page, text="Run", command=run)
     launch_s = Scale(test_page, orient=HORIZONTAL, length=125, from_=c, to=d)
     launch_s.place(x=300, y=16)
 
@@ -171,8 +184,15 @@ def launch_test():
     instruct_label.place(x=48, y=36)
 
     # buttons test list
-    buttons_test_list = ['null', 'Bubble Sort', 'Insertion Sort', 'Selection Sort', 'Quick Sort', 'Heap Sort',
-                         'Shell Sort']
+    buttons_test_list = [
+        "null",
+        "Bubble Sort",
+        "Insertion Sort",
+        "Selection Sort",
+        "Quick Sort",
+        "Heap Sort",
+        "Shell Sort",
+    ]
 
     # mainloop
     test_page.mainloop()
@@ -180,15 +200,15 @@ def launch_test():
 
 # methods
 def update_comparisons():
-    comparisons.configure(text='Comparisons:\t' + str(compare))
+    comparisons.configure(text="Comparisons:\t" + str(compare))
 
 
 def update_iterations():
-    iterations.configure(text='Iterations:\t' + str(iterate))
+    iterations.configure(text="Iterations:\t" + str(iterate))
 
 
 def update_elapsed():
-    elapsed.configure(text='Time Elapsed:\t' + str(round(elapse_rt, 3)) + 's')
+    elapsed.configure(text="Time Elapsed:\t" + str(round(elapse_rt, 3)) + "s")
 
 
 def stop():
@@ -202,33 +222,39 @@ def stop():
     global compare
     compare = 0
     update_comparisons()
-    canvas.delete('all')
+    canvas.delete("all")
 
 
 def clear():
     update_iterations()
     update_comparisons()
-    canvas.delete('all')
+    canvas.delete("all")
 
 
 def print_rectangles(val1, val2):
     for index in range(s.get()):
         if index == val1 or index == val2:
-            canvas.create_rectangle(coordinates_list[index], fill='red')
+            canvas.create_rectangle(coordinates_list[index], fill="red")
         else:
-            canvas.create_rectangle(coordinates_list[index], fill='black')
+            canvas.create_rectangle(coordinates_list[index], fill="black")
 
 
 def print_final():
     clear()
     for index in range(s.get()):
-        canvas.create_rectangle(coordinates_list[index], fill='green')
+        canvas.create_rectangle(coordinates_list[index], fill="green")
 
 
 def swap(g, j):
     coordinates_list[g], coordinates_list[j] = coordinates_list[j], coordinates_list[g]
-    coordinates_list[g][0], coordinates_list[j][0] = coordinates_list[j][0], coordinates_list[g][0]
-    coordinates_list[g][2], coordinates_list[j][2] = coordinates_list[j][2], coordinates_list[g][2]
+    coordinates_list[g][0], coordinates_list[j][0] = (
+        coordinates_list[j][0],
+        coordinates_list[g][0],
+    )
+    coordinates_list[g][2], coordinates_list[j][2] = (
+        coordinates_list[j][2],
+        coordinates_list[g][2],
+    )
 
 
 def bubble():
@@ -318,7 +344,7 @@ def partition(low, high):
     global elapse_rt
     global compare
     global iterate
-    idx = (low - 1)
+    idx = low - 1
     pivot = coordinates_list[high]
     for rectangle in range(low, high):
         iterate += 1
@@ -444,22 +470,37 @@ s = Scale(window, orient=HORIZONTAL, length=250, from_=c, to=d)
 s.place(x=50, y=50)
 
 # buttons
-create_visual = Button(window, text='Create Visual', command=create)
-bubble_sort_button = Button(window, text='Bubble Sort', command=bubble)
-selection_sort_button = Button(window, text='Selection Sort', command=selection)
-insertion_sort_button = Button(window, text='Insertion Sort', command=insertion)
-quick_sort_button = Button(window, text='Quick Sort', command=quick)
-heap_sort_button = Button(window, text='Heap Sort', command=heap)
-shell_sort_button = Button(window, text='Shell Sort', command=shell)
-clear_button = Button(window, text='Clear', command=stop)
-test_button = Button(window, text='Test', command=launch_test)
+create_visual = Button(window, text="Create Visual", command=create)
+bubble_sort_button = Button(window, text="Bubble Sort", command=bubble)
+selection_sort_button = Button(window, text="Selection Sort", command=selection)
+insertion_sort_button = Button(window, text="Insertion Sort", command=insertion)
+quick_sort_button = Button(window, text="Quick Sort", command=quick)
+heap_sort_button = Button(window, text="Heap Sort", command=heap)
+shell_sort_button = Button(window, text="Shell Sort", command=shell)
+clear_button = Button(window, text="Clear", command=stop)
+test_button = Button(window, text="Test", command=launch_test)
 
 # placement
 # components is order-sensitive
 
 # y_prime = range(115, 715, 50)
-for comp, y_coord in zip([create_visual, bubble_sort_button, selection_sort_button, insertion_sort_button, quick_sort_button,
-              heap_sort_button, shell_sort_button, clear_button, test_button, comparisons, iterations, elapsed], range(115, 715, 50)):
+for comp, y_coord in zip(
+    [
+        create_visual,
+        bubble_sort_button,
+        selection_sort_button,
+        insertion_sort_button,
+        quick_sort_button,
+        heap_sort_button,
+        shell_sort_button,
+        clear_button,
+        test_button,
+        comparisons,
+        iterations,
+        elapsed,
+    ],
+    range(115, 715, 50),
+):
     comp.place(x=50, y=y_coord)
 
 # mainloop
