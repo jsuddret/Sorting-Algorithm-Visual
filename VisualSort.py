@@ -457,11 +457,10 @@ test_button = Button(window, text='Test', command=launch_test)
 # placement
 # components is order-sensitive
 
-y_prime = range(115,115 + 50*9,50)
+# y_prime = range(115, 715, 50)
 for comp, y_coord in zip([create_visual, bubble_sort_button, selection_sort_button, insertion_sort_button, quick_sort_button,
-              heap_sort_button, shell_sort_button, clear_button, test_button, comparisons, iterations, elapsed], y_prime):
+              heap_sort_button, shell_sort_button, clear_button, test_button, comparisons, iterations, elapsed], range(115, 715, 50)):
     comp.place(x=50, y=y_coord)
-    # y_prime += 50
 
 # mainloop
 window.mainloop()
