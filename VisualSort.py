@@ -462,8 +462,8 @@ components = [create_visual, bubble_sort_button, selection_sort_button, insertio
 comp_text = ['Bubble Sort', 'Selection Sort', 'Insertion Sort', 'Quick Sort', 'Heap Sort', 'Shell Sort']
 
 y_prime = 115
-for comp in range(len(components)):
-    components[comp].place(x=50, y=y_prime)
+for comp in components:
+    comp.place(x=50, y=y_prime)
     y_prime += 50
 
 # mainloop
